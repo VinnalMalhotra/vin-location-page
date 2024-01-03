@@ -1,7 +1,8 @@
 /**
  * This is an example of how to create a static template that uses getStaticProps to retrieve data.
  */
-// import*asReact from"react";
+import * as React from "react";
+import { fetch } from "@yext/pages/util";
 import "../index.css";
 import {
   Template,
@@ -13,11 +14,12 @@ import {
   TemplateProps,
   TemplateRenderProps,
 } from "@yext/pages";
+import PageLayout from "../components/PageLayout";
 import Card from "../components/Card";
 import { ExternalImage } from "../types/ExternalImage";
-import PageLayout from "../components/PageLayout";
+
 import Banner from "../components/Banner";
-import * as React from "react";
+
 /**
  * Not required depending on your use case.
  */
@@ -43,6 +45,15 @@ type ExternalImageData = TemplateProps & { externalImage: ExternalImage };
  *
  * If the page is truly static this function is not necessary.
  */
+// export const transformProps: TransformProps<ExternalImageData> = async (
+//   data
+// ) => {
+//   const url = YEXT_PUBLIC_EXTERNAL_IMAGE_API_BASE_URL + "/2";
+//   const externalImage = (await fetch(url).then((res: any) =>
+//     res.json()
+//   )) as ExternalImage;
+//   return { ...data, externalImage };
+// };
 
 /**
  * Defines the path that the generated file will live at for production.
@@ -52,6 +63,10 @@ type ExternalImageData = TemplateProps & { externalImage: ExternalImage };
  */
 export const getPath: GetPath<ExternalImageData> = () => {
   return `index.html`;
+};
+
+type ExternalImageRenderData = TemplateRenderProps & {
+  externalImage: ExternalImage;
 };
 
 /**
@@ -64,7 +79,7 @@ export const getHeadConfig: GetHeadConfig<
   TemplateRenderProps
 > = (): HeadConfig => {
   return {
-    title: "Outreach | Home",
+    title: "Static Page Example",
     charset: "UTF-8",
     viewport: "width=device-width, initial-scale=1",
     tags: [
@@ -75,6 +90,13 @@ export const getHeadConfig: GetHeadConfig<
           content: "Static page example meta description.",
         },
       },
+      {
+        type: "link",
+        attributes: {
+          rel: "icon",
+          type: "image/x-icon",
+        },
+      },
     ],
   };
 };
@@ -83,14 +105,14 @@ export const getHeadConfig: GetHeadConfig<
  * This is the main template. It can have any name as long as it's the default export.
  * The props passed in here are the direct result from `transformProps`.
  */
-const Static: Template<TemplateRenderProps> = ({ document }) => {
+const Static: Template<ExternalImageRenderData> = ({ externalImage }) => {
   return (
     <>
       <PageLayout>
-        <Banner name={"Turtlehead Tacos"} />
+        <Banner name={"Yext Office Locations - Berlin"} />
         <div className="centered-container">
           <div className="section space-y-14 px-10">
-            {/* <Card {...externalImage} /> */}
+            <Card title={""} url={""} />
           </div>
         </div>
       </PageLayout>
